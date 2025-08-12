@@ -2,7 +2,6 @@ import { PostModel } from '@/models/post/post-model'
 import { PostRepository } from './post-repository'
 import { resolve } from 'path'
 import { readFile, writeFile } from 'fs/promises'
-import { SIMULATE_WAIT_IN_MS } from '@/lib/constants'
 
 const simulateWaitMs = Number(process.env.SIMULATE_WAIT_IN_MS) || 0
 
