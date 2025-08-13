@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminLoginPage() {
-  const allowLogin = Boolean(process.env.ALLOW_LOGIN)
+  const allowLogin = Boolean(Number(process.env.ALLOW_LOGIN))
 
   if (!allowLogin) {
     return <ErrorMessage contentTitle='403' content='Libere o login usando a variável de ambiente ALLOW_LOGIN' />

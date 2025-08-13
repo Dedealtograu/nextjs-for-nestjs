@@ -11,15 +11,15 @@ import { toast } from 'react-toastify'
 
 export function LoginForm() {
   const initialState = {
-    username: '',
-    error: '',
+    email: '',
+    errors: [],
   }
   const [state, action, isPending] = useActionState(loginAction, initialState)
 
   useEffect(() => {
-    if (state.error) {
+    if (state.errors.length > 0) {
       toast.dismiss()
-      toast.error(state.error)
+      state.errors.forEach(e => toast.error(e))
     }
   }, [state])
 
@@ -27,14 +27,22 @@ export function LoginForm() {
     <div className={clsx('flex items-center justify-center', 'text-center max-w-ms mt-16 mb-32 mx-auto')}>
       <form action={action} className='flex flex-col gap-6'>
         <InputText
-          type='text'
-          name='username'
-          labelText='Usuário'
-          placeholder='Seu usuário'
+          type='email'
+          name='email'
+          labelText='E-mail'
+          placeholder='Seu e-mail'
           disabled={isPending}
-          defaultValue={state.username}
+          defaultValue={state.email}
+          required
         />
-        <InputText type='password' name='password' labelText='Senha' placeholder='Sua senha' disabled={isPending} />
+        <InputText
+          type='password'
+          name='password'
+          labelText='Senha'
+          placeholder='Sua senha'
+          disabled={isPending}
+          required
+        />
 
         <Button disabled={isPending} type='submit' className='mt-4'>
           <LogInIcon />
@@ -44,7 +52,6 @@ export function LoginForm() {
         <p className='text-sm/tight'>
           <Link href='/user/new'>Ainda não possui uma conta?</Link>
         </p>
-        {!!state.error && <p className='text-red-600 mt-2'>{state.error}</p>}
       </form>
     </div>
   )
