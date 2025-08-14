@@ -1,34 +1,44 @@
 'use server'
 
-import { verifyLoginSession } from '@/lib/login/manage-login'
-import { postRepository } from '@/repositories/post'
+import { getLoginSessionForApi } from '@/lib/login/manage-login'
+import { PublicPostForApiDto } from '@/lib/post/schemas'
+import { authenticatedApiRequest } from '@/utils/authenticated-api-request'
 import { revalidateTag } from 'next/cache'
 
 export async function deletePostAction(id: string) {
-  const isAuthenticated = await verifyLoginSession()
+  const isAuthenticated = await getLoginSessionForApi()
 
   if (!isAuthenticated) {
-    return { error: 'Você precisa estar logado para deletar um post.' }
+    return { errors: 'Você precisa estar logado para deletar um post.' }
   }
 
   if (!id || typeof id !== 'string') {
     return { error: 'Dados inválidos' }
   }
 
-  let post
+  const postResponse = await authenticatedApiRequest<PublicPostForApiDto>(`/post/me/${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
 
-  try {
-    post = await postRepository.delete(id)
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      return { error: e.message }
-    }
+  if (!postResponse.success) {
+    return { error: 'Erro ao buscar post' }
+  }
 
-    return { error: 'Erro desconhecido' }
+  const deletePostResponse = await authenticatedApiRequest<PublicPostForApiDto>(`/post/me/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!deletePostResponse.success) {
+    return { error: 'Erro ao deletar post' }
   }
 
   revalidateTag('posts')
-  revalidateTag(`post-${post.slug}`)
+  revalidateTag(`post-${postResponse.data.slug}`)
 
   return { error: '' }
 }

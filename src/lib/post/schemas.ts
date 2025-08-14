@@ -1,6 +1,7 @@
 import { isUrlOrRelativePath } from '@/utils/is-url-or-relative-path'
 import sanitizeHtml from 'sanitize-html'
 import  { z } from 'zod'
+import { PublicUserSchema } from '../user/schemas'
 
 const PostBasicSchema = z.object({
   title: z
@@ -46,3 +47,22 @@ const PostBasicSchema = z.object({
 export const PostCreateSchema = PostBasicSchema
 
 export const PostUpdateSchema = PostBasicSchema.extend({})
+
+export const CreatePostForApiSchema = PostBasicSchema.omit({ author: true, published: true }).extend({})
+
+export const UpdatePostForApiSchema = PostBasicSchema.omit({ author: true }).extend({})
+
+export const PublicPostForApiSchema = PostBasicSchema.extend({
+  id: z.string().default(''),
+  slug: z.string().default(''),
+  title: z.string().default(''),
+  excerpt: z.string().default(''),
+  author: PublicUserSchema.optional().default({ id: '', name: '', email: '' }),
+  content: z.string().default(''),
+  coverImageUrl: z.string().default(''),
+  createdAt: z.string().default(''),
+})
+
+export type CreatePostForApiDto = z.infer<typeof CreatePostForApiSchema>
+export type UpdatePostForApiDto = z.infer<typeof UpdatePostForApiSchema>
+export type PublicPostForApiDto = z.infer<typeof PublicPostForApiSchema>
