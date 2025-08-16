@@ -6,7 +6,7 @@ export type PostModel = {
   slug: string;
   excerpt: string;
   content: string;
-  coverImageUrl: string;
+  coverImage: string;
   published: boolean;
   createdAt: string;
   updatedAt: string;
@@ -19,7 +19,7 @@ export type PostModelFromApi = {
   slug: string;
   excerpt: string;
   content: string;
-  coverImageUrl: string;
+  coverImage: string;
   published: boolean;
   createdAt: string;
   updatedAt: string;

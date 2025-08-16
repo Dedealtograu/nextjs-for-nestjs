@@ -125,10 +125,10 @@ export function ManagePostForm(props: ManagePostFormProps) {
 
         <InputText
           labelText='URL da imagem de capa'
-          name='coverImageUrl'
+          name='coverImage'
           placeholder='Digite a URL da imagem de capa'
           type='text'
-          defaultValue={formState.coverImageUrl}
+          defaultValue={formState.coverImage}
           disabled={isPending}
         />
 

@@ -24,7 +24,7 @@ const PostBasicSchema = z.object({
     .trim()
     .min(10, 'O excerto deve ter pelo menos 10 caracteres')
     .max(300, 'O excerto deve ter no máximo 300 caracteres'),
-  coverImageUrl: z
+  coverImage: z
     .string()
     .trim()
     .refine(isUrlOrRelativePath, {
@@ -59,7 +59,7 @@ export const PublicPostForApiSchema = PostBasicSchema.extend({
   excerpt: z.string().default(''),
   author: PublicUserSchema.optional().default({ id: '', name: '', email: '' }),
   content: z.string().default(''),
-  coverImageUrl: z.string().default(''),
+  coverImage: z.string().default(''),
   createdAt: z.string().default(''),
 })
 

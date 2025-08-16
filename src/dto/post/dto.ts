@@ -11,7 +11,7 @@ export const makePartialPublicPost = (post?: Partial<PostModel>): PublicPost => 
     excerpt: post?.excerpt || '',
     author: post?.author || '',
     content: post?.content || '',
-    coverImageUrl: post?.coverImageUrl || '',
+    coverImage: post?.coverImage || '',
     createdAt: post?.createdAt || '',
     published: post?.published || false,
   }

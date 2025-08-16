@@ -103,7 +103,7 @@ export class DrizzlePostRepository implements PostRepository {
     const postData = {
       author: newPostData.author,
       content: newPostData.content,
-      coverImageUrl: newPostData.coverImageUrl,
+      coverImage: newPostData.coverImage,
       excerpt: newPostData.excerpt,
       published: newPostData.published,
       title: newPostData.title,

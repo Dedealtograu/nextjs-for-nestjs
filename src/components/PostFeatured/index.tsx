@@ -1,12 +1,23 @@
 import ErrorMessage from '../ErrorMessage'
 import { PostCoverImage } from '../PostCoverImage'
 import { PostSummary } from '../PostSummary'
-import { findAllPublicPostsCached } from '@/lib/post/queries/public'
+import { findAllPublicPostsFromApiCached } from '@/lib/post/queries/public'
 
 export async function PostFeatured() {
-  const posts = await findAllPublicPostsCached()
-  if (posts.length <= 0) return <ErrorMessage contentTitle='Ops 😁' content='Ainda não temos nenhum post!' />
-  const [firstPost] = posts
+  const postsRes = await findAllPublicPostsFromApiCached()
+  const noPostsFound = <ErrorMessage contentTitle='Ops 😁' content='Ainda não temos nenhum post!' />
+
+  if (!postsRes.success) {
+    return noPostsFound
+  }
+
+  const posts = postsRes.data
+
+  if (posts.length <= 0) {
+    return noPostsFound
+  }
+
+  const firstPost = posts[0]
   const postLink = `/post/${firstPost.slug}`
 
   return (
@@ -18,7 +29,7 @@ export async function PostFeatured() {
         imageProps={{
           width: 1200,
           height: 720,
-          src: firstPost.coverImageUrl,
+          src: firstPost.coverImage,
           alt: firstPost.title,
           priority: true,
         }}
