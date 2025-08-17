@@ -2,8 +2,8 @@
 
 import { CreateUserSchema, PublicUserDto, PublicUserSchema } from '@/lib/user/schemas'
 import { apiRequest } from '@/utils/api-request'
-import { asyncDelay } from '@/utils/async-delay'
 import { getZodErrorMessages } from '@/utils/get-zod-error-messages'
+import { verifyHoneypotInput } from '@/utils/verify-honeypot-input'
 import { redirect } from 'next/navigation'
 
 type CreateUserActionStete = {
@@ -13,7 +13,15 @@ type CreateUserActionStete = {
 }
 
 export async function createUserAction(state: CreateUserActionStete, formData: FormData): Promise<CreateUserActionStete> {
-  await asyncDelay(3000)
+  const isBot = await verifyHoneypotInput(formData, 5000)
+
+  if (isBot) {
+    return {
+      user: state.user,
+      errors: ['Você é um bot'],
+      success: false,
+    }
+  }
 
   if (!(formData instanceof FormData)) {
     return {
