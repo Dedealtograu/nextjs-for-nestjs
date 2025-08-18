@@ -11,6 +11,7 @@ import { asyncDelay } from '@/utils/async-delay'
 import { PublicUserDto } from '@/lib/user/schemas'
 import { updateUserAction } from '@/actions/user/update-user-action'
 import { toast } from 'react-toastify'
+import { deleteUserAction } from '@/actions/user/delete-user-action'
 
 type UpdateUserFormProps = {
   user: PublicUserDto
@@ -37,7 +38,18 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
   }
 
   function handleDeleteAccount() {
-    //setIsDialogVisible(false)
+    startTransition(async () => {
+      if (!confirm('Confirma só mais uma vez que deseja excluir sua conta?')) return
+
+      const result = await deleteUserAction()
+
+      if (result.errors) {
+        toast.dismiss()
+        result.errors.forEach(error => toast.error(error))
+      }
+
+      setIsDialogVisible(false)
+    })
   }
 
   useEffect(() => {
