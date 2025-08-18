@@ -5,8 +5,6 @@ export async function verifyHoneypotInput(formData: FormData, delay = 3000 ) {
 
   const niceInputValue = formData.get('dateUpdatedAt')
 
-  console.log(formData)
-
   const isBot = niceInputValue === null || (typeof niceInputValue === 'string' && niceInputValue.trim() !== '')
 
   return isBot
