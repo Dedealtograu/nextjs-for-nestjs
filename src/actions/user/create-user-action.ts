@@ -42,7 +42,7 @@ export async function createUserAction(state: CreateUserActionStete, formData: F
     }
   }
 
-  const createResponse = await apiRequest<PublicUserDto>('/users', {
+  const createResponse = await apiRequest<PublicUserDto>('/user', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
